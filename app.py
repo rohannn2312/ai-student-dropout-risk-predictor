@@ -1,12 +1,14 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import joblib
+import os
 
 app = Flask(__name__)
 CORS(app)
 
 # Load trained model
 model = joblib.load("model/dropout_model.pkl")
+
 
 @app.route("/")
 def home():
@@ -18,13 +20,13 @@ def predict():
 
     data = request.json
 
-    attendance = data["attendance"]
-    study_hours = data["study_hours"]
-    assignments = data["assignments"]
-    gpa = data["gpa"]
-    participation = data["participation"]
+    attendance = float(data["attendance"])
+    study_hours = float(data["study_hours"])
+    assignments = float(data["assignments"])
+    gpa = float(data["gpa"])
+    participation = float(data["participation"])
 
-    # Calculate risk score
+    # Risk score calculation
     risk_score = (100 - attendance) + (6 - study_hours) * 5 + (100 - assignments) * 0.5 + (10 - gpa) * 3
 
     if risk_score < 80:
@@ -38,4 +40,5 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
