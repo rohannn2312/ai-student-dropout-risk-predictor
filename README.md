@@ -6,6 +6,10 @@ https://ai-student-dropout-risk-predictor.onrender.com
 
 ## About the Project
 
+## System Architecture
+
+![System Architecture](images/system_architecture.png)
+
 This project predicts the dropout risk of students using an AI model.
 
 The system analyzes:
